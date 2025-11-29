@@ -1,4 +1,4 @@
-﻿using Domain.Entities;
+using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -18,6 +18,6 @@ namespace Application.DTO.UsuarioViajes
         public string UsuarioId { get; set; }
         [Required(ErrorMessage = "El viaje es obligatorio.")]
         public int ViajeId { get; set; }
-        public string CreatorUserId { get; set; }
+        public string CreatorUserId { get; set; } = string.Empty;
     }
 }

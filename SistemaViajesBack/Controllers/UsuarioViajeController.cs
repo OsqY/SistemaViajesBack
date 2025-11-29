@@ -1,14 +1,16 @@
-﻿using Application.DTO.UsuarioViajes;
+using Application.DTO.UsuarioViajes;
 using Application.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Domain.Entities;
 
 namespace SistemaViajesBack.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = "Gerente")]
-    public class UsuarioViajeController(IUsuarioViajeService usuarioViajeService) : ControllerBase
+    public class UsuarioViajeController(IUsuarioViajeService usuarioViajeService, UserManager<Usuario> userManager) : ControllerBase
     {
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UsuarioViajeDTO>>> Get([FromQuery] FilterUsuarioViajeDTO filter)
@@ -30,8 +32,16 @@ namespace SistemaViajesBack.Controllers
         [HttpPost]
         public async Task<ActionResult<UsuarioViajeDTO>> Post([FromBody] CreateUsuarioViajeDTO createUsuarioViaje)
         {
+            var user = await userManager.GetUserAsync(HttpContext.User);
+
+            if (user == null)
+                return Unauthorized();
+
+            createUsuarioViaje.CreatorUserId = user.Id;
+
             if (!ModelState.IsValid)
                 return BadRequest();
+
             await usuarioViajeService.AddUsuarioViajeAsync(createUsuarioViaje);
             return Ok();
         }
@@ -43,6 +53,7 @@ namespace SistemaViajesBack.Controllers
             {
                 if (!ModelState.IsValid)
                     return BadRequest();
+
                 await usuarioViajeService.UpdateUsuarioViajeAsync(updateUsuarioViaje);
                 return NoContent();
             }

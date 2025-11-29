@@ -10,10 +10,11 @@ namespace SistemaViajesBack.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "Gerente")]
     public class AuthController(UserManager<Usuario> userManager) : ControllerBase
     {
 
-        [HttpGet]
+        [HttpGet("usuarios")]
         public async Task<ActionResult<UsuarioForDropdownDTO>> GetUsuarioForDropdown()
         {
             var usuarios = await userManager.Users.Select(u => new UsuarioForDropdownDTO

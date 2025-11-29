@@ -64,7 +64,8 @@ namespace Application.Services
                 Tarifa = createUsuarioViaje.Tarifa,
                 Fecha = DateOnly.FromDateTime(DateTime.Now),
                 ViajeId = createUsuarioViaje.ViajeId,
-                UsuarioId = createUsuarioViaje.UsuarioId
+                UsuarioId = createUsuarioViaje.UsuarioId,
+                CreatorUserId = createUsuarioViaje.CreatorUserId,
             };
 
             viaje.AgregarPasajero(usuarioViaje);

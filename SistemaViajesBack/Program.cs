@@ -35,7 +35,8 @@ builder.Services.AddIdentityApiEndpoints<Usuario>(
         options.Password.RequireUppercase = true;
         options.Password.RequiredLength = 12;
     }
-).AddEntityFrameworkStores<AppDbContext>();
+).AddRoles<IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
+
 
 builder.Services.AddScoped<IUsuarioViajeRepository, UsuarioViajeRepository>();
 builder.Services.AddScoped<IUsuarioViajeService, UsuarioViajeService>();

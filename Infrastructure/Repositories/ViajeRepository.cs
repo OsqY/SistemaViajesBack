@@ -80,7 +80,8 @@ namespace Infrastructure.Repositories
 
         public async Task<IEnumerable<Viaje>> GetViajesForReport(FilterReportDTO filter)
         {
-            var viajes = context.Viajes.AsNoTracking();
+            var viajes = context.Viajes.Include(v => v.Transportista)
+                .Include(v => v.Sucursal).AsNoTracking();
 
             if (filter.MinTarifaTotal != null)
                 viajes = viajes.Where(e => e.TarifaTotal >= filter.MinTarifaTotal);
@@ -97,7 +98,10 @@ namespace Infrastructure.Repositories
             if (filter.TransportistaId != null)
                 viajes = viajes.Where(e => e.TransportistaId == filter.TransportistaId);
 
-            return viajes;
+            if (filter.SucursalId != null)
+                viajes = viajes.Where(e => e.SucursalId == filter.SucursalId);
+
+            return await viajes.ToListAsync();
         }
     }
 }
